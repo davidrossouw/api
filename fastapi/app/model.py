@@ -4,7 +4,6 @@ import keras
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.optimizers import SGD, Adam
 
 
 def create(input_shape, num_classes):
@@ -84,33 +83,4 @@ class SimpsonClassifier(object):
 		y_pred = self.model.predict_classes(img)[0]
 		y_pred_name = self.map_characters[y_pred]
 		y_prob = round(self.model.predict_proba(img)[0][y_pred], 2)
-		return {'y_pred': y_pred_name, 'y_prob': y_prob}
-
-
-def load_img(path, size=64):
-	'''
-	Load image from file, resize and return numpy array
-	'''
-	img = cv2.imread(path)
-	img = cv2.resize(img, (size, size)).astype('float32') / 255.
-	img = np.expand_dims(img, axis=0)
-	return img
-
-
-# def run_model(img):
-# 	'''
-# 	Run the model on the input image. Return the prediction and probability
-# 	in a dictionary
-# 	'''
-# 	y_pred = model.predict_classes(img)[0]
-# 	y_pred_name = map_characters[y_pred]
-# 	y_prob = round(model.predict_proba(img)[0][y_pred], 2)
-# 	return {'y_pred': y_pred_name, 'y_prob': y_prob}
-
-img = load_img('/Users/davidrossouw/Documents/my_projects/api/fastapi/app/data/principal_skinner_3.jpg', 64)
-model = SimpsonClassifier(weights_path='/Users/davidrossouw/Documents/my_projects/api/fastapi/app/data/weights.best.hdf5', pic_size=64)
-print (model.run(img))
-
-
-# img = load_img()
-# print(run_model(img))
+		return {'y_pred': y_pred_name, 'y_prob': str(y_prob)}
