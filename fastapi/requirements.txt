@@ -1,4 +1,5 @@
-fastapi
+fastapi[all]
+python-multipart
 uvicorn
 opencv-python
 tensorflow==1.13.1
