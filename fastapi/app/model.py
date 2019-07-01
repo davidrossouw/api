@@ -8,7 +8,10 @@ from keras.layers import Dense, Dropout, Activation, Flatten
 
 def create(input_shape, num_classes):
 	"""
-	CNN Keras model with 6 convolutions.
+	This model architecture and code was copied from a Kaggle submission here:
+	https://www.kaggle.com/alexattia/visualizing-predicted-characters
+
+	It is a CNN Keras model with 6 convolutions.
 	:param input_shape: input shape, generally X_train.shape[1:]
 	:return: Keras model, RMS prop optimizer
 	"""

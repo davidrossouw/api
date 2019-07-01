@@ -31,14 +31,14 @@ async def create_item(item: Item):
 
 
 @app.post("/classify_image/")
-async def create_file(file: bytes = File(...)):
+async def classify_image(file: bytes = File(...)):
 	# CV2
 	img_size = 64
 	img = cv2.imdecode(np.fromstring(file, np.uint8), cv2.IMREAD_COLOR)
 	img = cv2.resize(img, (img_size, img_size)).astype('float32') / 255.
 	img = np.expand_dims(img, axis=0)
 	
-	model = SimpsonClassifier(weights_path='/Users/davidrossouw/Documents/my_projects/api/fastapi/app/data/weights.best.hdf5', pic_size=img_size)
+	model = SimpsonClassifier(weights_path='./data/weights.best.hdf5', pic_size=img_size)
 	result = model.run(img)
 	print(result)
 	
