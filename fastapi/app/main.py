@@ -4,6 +4,8 @@ import numpy as np
 from fastapi import FastAPI, File
 from pydantic import BaseModel
 
+from model import SimpsonClassifier	
+
 
 class Item(BaseModel):
 	name: str
