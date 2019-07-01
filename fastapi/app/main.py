@@ -34,3 +34,8 @@ async def create_file(file: bytes = File(...)):
 	nparr = np.fromstring(file, np.uint8)
 	img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 	return {"file_size": len(file), "image_size": img_np.shape}
+
+
+def load_keras_model():
+	model = load_model_from_checkpoint('./data/weights.best.hdf5')
+	print(model)
