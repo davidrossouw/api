@@ -32,14 +32,16 @@ async def create_item(item: Item):
 
 @app.post("/classify_image/")
 async def classify_image(file: bytes = File(...)):
-	# CV2
+	# Prepare image
 	img_size = 64
 	img = cv2.imdecode(np.fromstring(file, np.uint8), cv2.IMREAD_COLOR)
 	img = cv2.resize(img, (img_size, img_size)).astype('float32') / 255.
 	img = np.expand_dims(img, axis=0)
 	
+	# Instantiate model
 	model = SimpsonClassifier(weights_path='./data/weights.best.hdf5', pic_size=img_size)
-	result = model.run(img)
-	print(result)
+	
+	# Run model
+	result = model.run(img)	
 	
 	return {"y_pred": result['y_pred'], "y_prob": result['y_prob']}
