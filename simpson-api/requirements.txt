@@ -1,6 +1,5 @@
-fastapi[all]
-python-multipart
-uvicorn
+Flask==0.12
+flask-restful==0.3.5
 opencv-python 
 tensorflow==1.5
 keras==2.2.4
