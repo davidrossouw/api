@@ -1,7 +1,10 @@
 # Simpson classifier Service
 
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Resource, Api, reqparse
+from flask_httpauth import HTTPBasicAuth
+
 import numpy as np
 import cv2
 import time
@@ -12,12 +15,28 @@ import os
 
 # Instantiate the app
 app = Flask(__name__)
+
+CORS(app)
 api = Api(app)
+
+auth = HTTPBasicAuth()
+
+USER_DATA = {
+    "david": "cookiesandcream"
+}
+
 
 UPLOAD_FOLDER = 'static/img'
 parser = reqparse.RequestParser()
 parser.add_argument(
     'file', type=werkzeug.datastructures.FileStorage, location='files')
+
+
+@auth.verify_password
+def verify(username, password):
+    if not (username and password):
+        return False
+    return USER_DATA.get(username) == password
 
 
 def read_image(file):
@@ -31,23 +50,17 @@ def read_image(file):
 
 class HelloWorld(Resource):
     def get(self):
-        return {'hello': 'world1'}
+        return {'hello': 'world!'}
 
 
 class PhotoUpload(Resource):
-    decorators = []
-
+    @auth.login_required
     def post(self):
         data = parser.parse_args()
-        if data['file'] == "":
-            return {
-                'data': '',
-                'message': 'No file found',
-                'status': 'error'
-            }
-        photo = data['file']
+        photo = data.get('file', None)
+        print(photo)
         if photo:
-            filename = 'your_image.png'
+            # filename = 'your_image.png'
             # save image to disk
             # photo.save(os.path.join(UPLOAD_FOLDER,filename))
 
@@ -66,14 +79,10 @@ class PhotoUpload(Resource):
             result = model.run(img)
             # 	return {"y_pred": result['y_pred'], "y_prob": result['y_prob']}
             return {
-                'data': '',
-                'message': 'photo uploaded',
-                'status': 'success',
-                'image size': img.shape,
-                'result': result
+                'y_pred': result["y_pred"],
+                'y_prob': result["y_prob"]
             }
         return {
-            'data': '',
             'message': 'Something when wrong',
             'status': 'error'
         }
